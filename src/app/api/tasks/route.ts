@@ -3,11 +3,9 @@ import { getFaultMode, tasks } from "@/lib/tasks";
 
 export const dynamic = "force-dynamic";
 
-export function GET() {
+export function GET(request: Request) {
   const mode = getFaultMode();
 
-  // These faults are deliberately controlled by a server-side environment
-  // variable; no public URL parameter can trigger a failure.
   if (mode === "runtime" || mode === "persistent") {
     return NextResponse.json(
       {
@@ -21,10 +19,19 @@ export function GET() {
     );
   }
 
+  const status = new URL(request.url).searchParams.get("status");
+  if (!status) {
+    return NextResponse.json(
+      { ok: false, error: "Task service failed while listing tasks." },
+      { status: 500 }
+    );
+  }
+
+  const selected = tasks.filter((task) => task.status === status.toLowerCase());
   return NextResponse.json({
     ok: true,
-    count: tasks.length,
-    tasks,
+    count: selected.length,
+    tasks: selected,
     timestamp: new Date().toISOString()
   });
 }
