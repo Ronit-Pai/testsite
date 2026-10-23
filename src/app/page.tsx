@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { tasks } from "@/lib/tasks";
 
 const statusClass: Record<string, string> = {
@@ -14,10 +15,10 @@ export default function Home() {
   return (
     <main className="shell">
       <header className="topbar">
-        <a className="brand" href="/" aria-label="TaskFlow home">
+        <Link className="brand" href="/" aria-label="TaskFlow home">
           <span className="brand-mark">T</span>
           <span>TaskFlow<span className="brand-dot">.</span></span>
-        </a>
+        </Link>
         <div className="topbar-right">
           <span className="environment"><span className="pulse" /> Sample environment</span>
           <div className="avatar" aria-label="Platform team">PT</div>
@@ -55,7 +56,7 @@ export default function Home() {
 
       <section className="tasks-panel">
         <div className="panel-heading">
-          <div><h2>Team tasks</h2><p>Your team's latest work at a glance.</p></div>
+          <div><h2>Team tasks</h2><p>Your team&apos;s latest work at a glance.</p></div>
           <span className="task-count">{total} tasks</span>
         </div>
         <div className="task-list">
