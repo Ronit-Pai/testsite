@@ -3,7 +3,7 @@ import { getFaultMode, tasks } from "@/lib/tasks";
 
 export const dynamic = "force-dynamic";
 
-export function GET() {
+export function GET(request: Request) {
   const mode = getFaultMode();
 
   // These faults are deliberately controlled by a server-side environment
@@ -21,10 +21,13 @@ export function GET() {
     );
   }
 
+  const status = new URL(request.url).searchParams.get("status");
+  const filteredTasks = status ? tasks.filter((task) => task.status === status) : tasks;
+
   return NextResponse.json({
     ok: true,
-    count: tasks.length,
-    tasks,
+    count: filteredTasks.length,
+    tasks: filteredTasks,
     timestamp: new Date().toISOString()
   });
 }
