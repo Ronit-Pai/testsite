@@ -20,9 +20,14 @@ export function GET(request: Request) {
   }
 
   const status = new URL(request.url).searchParams.get("status");
-  const selected = status
-    ? tasks.filter((task) => task.status.toLowerCase() === status.toLowerCase())
-    : tasks;
+  if (!status) {
+    return NextResponse.json(
+      { ok: false, error: "Task service failed while listing tasks." },
+      { status: 500 }
+    );
+  }
+
+  const selected = tasks.filter((task) => task.status === status.toLowerCase());
   return NextResponse.json({
     ok: true,
     count: selected.length,
